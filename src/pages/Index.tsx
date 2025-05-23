@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Mic, Volume2, Trash2, Send, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
+import { isMathProblem, solveMathProblem } from '@/utils/mathOperations';
 
 interface Message {
   id: string;
@@ -51,6 +52,21 @@ const Index = () => {
     setIsLoading(true);
     
     try {
+      // Check if this is a math problem we can solve locally
+      if (isMathProblem(userMessage)) {
+        const localSolution = solveMathProblem(userMessage);
+        if (localSolution) {
+          // We solved it locally! No need to query the backend
+          setTimeout(() => {
+            addMessage(localSolution, 'bot');
+            setIsLoading(false);
+            toast.success('Calculated locally');
+          }, 300); // Small delay for better UX
+          return;
+        }
+      }
+
+      // If not a math problem or we couldn't solve it locally, send to backend
       const response = await fetch('http://localhost:5000/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -164,6 +180,7 @@ const Index = () => {
                   <Sparkles className="mx-auto mb-4 text-mystical-gold" size={48} />
                   <p className="text-lg">Welcome to the mystical realm...</p>
                   <p className="text-sm">Ask জাদুকর anything, and receive wisdom beyond time</p>
+                  <p className="text-xs mt-4 text-mystical-gold font-railway">Try math questions directly for instant calculations!</p>
                 </div>
               ) : (
                 messages.map((message) => (
