@@ -128,16 +128,23 @@ const Index = () => {
       <div className="container mx-auto px-4 py-8 max-w-4xl relative z-10">
         {/* Header */}
         <header className="text-center mb-8 animate-float">
-          <div className="flex justify-center items-center mb-4">
-            <img 
-              src="/lovable-uploads/d3a914eb-613e-46ae-aff0-f38016cd35be.png"
-              alt="জাদুকর Logo"
-              className="w-24 h-24 mr-4 drop-shadow-lg"
-            />
+          <div className="flex justify-center items-center mb-4 flex-col">
+            {/* Updated logo with white ring */}
+            <div className="rounded-full bg-white p-1 mb-2 shadow-lg">
+              <img 
+                src="/lovable-uploads/d3a914eb-613e-46ae-aff0-f38016cd35be.png"
+                alt="জাদুকর Logo"
+                className="w-24 h-24 rounded-full drop-shadow-lg"
+              />
+            </div>
             <div>
               <h1 className="font-cinzel text-5xl font-semibold text-white drop-shadow-lg mb-2">
                 জাদুকর
               </h1>
+              {/* Added English name */}
+              <p className="font-railway text-xl text-mystical-light/90 mb-2">
+                JADOOKOR
+              </p>
               <p className="font-railway text-xl text-mystical-light/90">
                 The Mystical AI Assistant
               </p>
@@ -255,7 +262,7 @@ const Index = () => {
 
         {/* Footer */}
         <footer className="text-center mt-8 text-mystical-light/60 font-quicksand">
-          <p>&copy; 2025 জাদুকর - Where ancient wisdom meets modern intelligence</p>
+          <p>&copy; 2025 জাদুকর (JADOOKOR) - Where ancient wisdom meets modern intelligence</p>
         </footer>
       </div>
     </div>
