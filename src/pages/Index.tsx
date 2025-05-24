@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -141,42 +140,42 @@ const Index = () => {
         <Sparkles size={22} />
       </div>
 
-      <div className="container mx-auto px-4 py-8 max-w-4xl relative z-10">
-        {/* Header */}
-        <header className="text-center mb-8 animate-float">
-          <div className="flex justify-center items-center mb-4 flex-col">
+      <div className="container mx-auto px-4 py-4 max-w-4xl relative z-10">
+        {/* Header - Made more compact */}
+        <header className="text-center mb-4 animate-float">
+          <div className="flex justify-center items-center mb-2 flex-col">
             {/* Updated logo with white ring */}
-            <div className="rounded-full bg-white p-1 mb-2 shadow-lg">
+            <div className="rounded-full bg-white p-1 mb-1 shadow-lg">
               <img 
                 src="/lovable-uploads/d3a914eb-613e-46ae-aff0-f38016cd35be.png"
                 alt="জাদুকর Logo"
-                className="w-24 h-24 rounded-full drop-shadow-lg"
+                className="w-16 h-16 rounded-full drop-shadow-lg"
               />
             </div>
             <div>
-              <h1 className="font-cinzel text-5xl font-semibold text-white drop-shadow-lg mb-2">
+              <h1 className="font-cinzel text-3xl font-semibold text-white drop-shadow-lg mb-1">
                 জাদুকর
               </h1>
               {/* Added English name */}
-              <p className="font-railway text-xl text-mystical-light/90 mb-2">
+              <p className="font-railway text-lg text-mystical-light/90 mb-1">
                 JADOOKOR
               </p>
-              <p className="font-railway text-xl text-mystical-light/90">
+              <p className="font-railway text-sm text-mystical-light/90">
                 The Mystical AI Assistant
               </p>
             </div>
           </div>
-          <p className="font-poppins text-mystical-light/80 italic">
+          <p className="font-poppins text-sm text-mystical-light/80 italic">
             "Wisdom from ancient scrolls, powered by modern enchantments"
           </p>
         </header>
 
-        {/* Chat Box - Made more compact */}
-        <Card className="bg-white/10 backdrop-blur-sm border-mystical-gold/30 mb-6 h-80 overflow-hidden">
+        {/* Chat Box - Increased height since header is smaller */}
+        <Card className="bg-white/10 backdrop-blur-sm border-mystical-gold/30 mb-4 h-96 overflow-hidden">
           <div className="h-full flex flex-col">
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {messages.length === 0 ? (
-                <div className="text-center text-mystical-light/70 font-quicksand mt-16">
+                <div className="text-center text-mystical-light/70 font-quicksand mt-20">
                   <Sparkles className="mx-auto mb-4 text-mystical-gold" size={48} />
                   <p className="text-lg">Welcome to the mystical realm...</p>
                   <p className="text-sm">Ask জাদুকর anything, and receive wisdom beyond time</p>
@@ -222,8 +221,8 @@ const Index = () => {
           </div>
         </Card>
 
-        {/* Controls */}
-        <div className="flex flex-wrap gap-3 mb-4 justify-center">
+        {/* Controls - Made more compact */}
+        <div className="flex flex-wrap gap-2 mb-3 justify-center">
           <Button
             onClick={() => setCurrentModel(currentModel === 1 ? 2 : 1)}
             variant="secondary"
@@ -277,9 +276,9 @@ const Index = () => {
           </Button>
         </div>
 
-        {/* Footer */}
-        <footer className="text-center mt-8 text-mystical-light/60 font-quicksand">
-          <p>&copy; 2025 জাদুকর (JADOOKOR) - Where ancient wisdom meets modern intelligence</p>
+        {/* Footer - Made more compact */}
+        <footer className="text-center mt-4 text-mystical-light/60 font-quicksand">
+          <p className="text-xs">&copy; 2025 জাদুকর (JADOOKOR) - Where ancient wisdom meets modern intelligence</p>
         </footer>
       </div>
     </div>
