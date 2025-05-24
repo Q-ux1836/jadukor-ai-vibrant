@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -142,24 +141,24 @@ const Index = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8 max-w-4xl relative z-10">
-        {/* Header - Restored original size */}
+        {/* Header */}
         <header className="text-center mb-8 animate-float">
           <div className="flex justify-center items-center mb-4 flex-col">
-            {/* Updated logo with white ring */}
+            {/* Updated logo with user-uploaded image */}
             <div className="rounded-full bg-white p-1 mb-2 shadow-lg">
               <img 
-                src="/lovable-uploads/d3a914eb-613e-46ae-aff0-f38016cd35be.png"
-                alt="জাদুকর Logo"
+                src="/lovable-uploads/2d8c25c0-04a6-4070-9f86-cf375f3b7528.png"
+                alt="Mistry AI Logo"
                 className="w-24 h-24 rounded-full drop-shadow-lg"
               />
             </div>
             <div>
               <h1 className="font-cinzel text-5xl font-semibold text-white drop-shadow-lg mb-2">
-                জাদুকর
+                Mistry AI
               </h1>
-              {/* Added English name */}
+              {/* Keep English name in "Mistry AI" branding */}
               <p className="font-railway text-xl text-mystical-light/90 mb-2">
-                JADOOKOR
+                Mistry AI
               </p>
               <p className="font-railway text-xl text-mystical-light/90">
                 The Mystical AI Assistant
@@ -171,7 +170,7 @@ const Index = () => {
           </p>
         </header>
 
-        {/* Chat Box - Restored original height */}
+        {/* Chat Box */}
         <Card className="bg-white/10 backdrop-blur-sm border-mystical-gold/30 mb-6 h-80 overflow-hidden">
           <div className="h-full flex flex-col">
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -179,8 +178,7 @@ const Index = () => {
                 <div className="text-center text-mystical-light/70 font-quicksand mt-16">
                   <Sparkles className="mx-auto mb-4 text-mystical-gold" size={48} />
                   <p className="text-lg">Welcome to the mystical realm...</p>
-                  <p className="text-sm">Ask জাদুকর anything, and receive wisdom beyond time</p>
-                  <p className="text-xs mt-4 text-mystical-gold font-railway">Try math questions directly for instant calculations!</p>
+                  <p className="text-sm">Ask Mistry AI anything, and receive wisdom beyond time</p>
                 </div>
               ) : (
                 messages.map((message) => (
@@ -212,7 +210,7 @@ const Index = () => {
                       <div className="w-2 h-2 bg-mystical-gold rounded-full animate-bounce"></div>
                       <div className="w-2 h-2 bg-mystical-gold rounded-full animate-bounce delay-100"></div>
                       <div className="w-2 h-2 bg-mystical-gold rounded-full animate-bounce delay-200"></div>
-                      <span className="ml-2">জাদুকর is consulting the ancient texts...</span>
+                      <span className="ml-2">Mistry AI is consulting the ancient texts...</span>
                     </div>
                   </div>
                 </div>
@@ -222,7 +220,7 @@ const Index = () => {
           </div>
         </Card>
 
-        {/* Controls - Restored original spacing */}
+        {/* Controls */}
         <div className="flex flex-wrap gap-3 mb-4 justify-center">
           <Button
             onClick={() => setCurrentModel(currentModel === 1 ? 2 : 1)}
@@ -263,7 +261,7 @@ const Index = () => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Speak your query to জাদুকর..."
+            placeholder="Speak your query to Mistry AI..."
             className="flex-1 bg-white/20 border-mystical-gold/30 text-mystical-light placeholder-mystical-light/60 font-poppins"
             disabled={isLoading}
           />
@@ -277,9 +275,9 @@ const Index = () => {
           </Button>
         </div>
 
-        {/* Footer - Restored original size */}
+        {/* Footer */}
         <footer className="text-center mt-8 text-mystical-light/60 font-quicksand">
-          <p>&copy; 2025 জাদুকর (JADOOKOR) - Where ancient wisdom meets modern intelligence</p>
+          <p>&copy; 2025 Mistry AI - Where ancient wisdom meets modern intelligence</p>
         </footer>
       </div>
     </div>
