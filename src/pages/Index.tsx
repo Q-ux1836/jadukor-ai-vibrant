@@ -1,16 +1,20 @@
+
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
-import { Mic, Volume2, Trash2, Send, Sparkles } from 'lucide-react';
+import { Mic, Volume2, Trash2, Send, Sparkles, Upload, Info } from 'lucide-react';
 import { toast } from 'sonner';
 import { isMathProblem, solveMathProblem } from '@/utils/mathOperations';
+import BuilderInfoDialog from '@/components/BuilderInfoDialog';
 
 interface Message {
   id: string;
   text: string;
-  sender: 'user' | 'bot';
+  sender: 'user' | 'bot' | 'system';
   timestamp: Date;
+  fileUrl?: string;
+  fileName?: string;
 }
 
 const Index = () => {
@@ -18,8 +22,10 @@ const Index = () => {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [currentModel, setCurrentModel] = useState(1);
+  const [showBuilderInfo, setShowBuilderInfo] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const lastBotResponse = useRef('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const scrollToBottom = () => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -29,12 +35,14 @@ const Index = () => {
     scrollToBottom();
   }, [messages]);
 
-  const addMessage = (text: string, sender: 'user' | 'bot') => {
+  const addMessage = (text: string, sender: 'user' | 'bot' | 'system', fileUrl?: string, fileName?: string) => {
     const newMessage: Message = {
       id: Date.now().toString(),
       text,
       sender,
-      timestamp: new Date()
+      timestamp: new Date(),
+      fileUrl,
+      fileName
     };
     setMessages(prev => [...prev, newMessage]);
     if (sender === 'bot') {
@@ -44,36 +52,33 @@ const Index = () => {
 
   const sendMessage = async () => {
     if (!input.trim()) return;
-    
+
     const userMessage = input.trim();
     setInput('');
     addMessage(userMessage, 'user');
     setIsLoading(true);
-    
+
     try {
-      // Check if this is a math problem we can solve locally
       if (isMathProblem(userMessage)) {
         const localSolution = solveMathProblem(userMessage);
         if (localSolution) {
-          // We solved it locally! No need to query the backend
           setTimeout(() => {
             addMessage(localSolution, 'bot');
             setIsLoading(false);
             toast.success('Calculated locally');
-          }, 300); // Small delay for better UX
+          }, 300);
           return;
         }
       }
 
-      // If not a math problem or we couldn't solve it locally, send to backend
       const response = await fetch('http://localhost:5000/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt: userMessage })
       });
-      
+
       if (!response.ok) throw new Error('Network response was not ok');
-      
+
       const data = await response.json();
       addMessage(data.reply, 'bot');
       toast.success('Response received');
@@ -102,18 +107,17 @@ const Index = () => {
   };
 
   const startVoiceRecognition = () => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) {
       toast.error('Speech recognition not supported in this browser');
       return;
     }
-    
     const recognition = new SpeechRecognition();
     recognition.lang = 'en-US';
-    recognition.onresult = (event) => {
+    recognition.onresult = (event: any) => {
       setInput(event.results[0][0].transcript);
     };
-    recognition.onerror = (event) => {
+    recognition.onerror = (event: any) => {
       toast.error(`Voice recognition error: ${event.error}`);
     };
     recognition.start();
@@ -124,9 +128,28 @@ const Index = () => {
     toast.success('Chat cleared');
   };
 
+  // File upload behavior (just demo - storing local URL, for prod upload to actual backend/storage)
+  const handleFileInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // For demo: create local preview URL
+      const localUrl = URL.createObjectURL(file);
+      // Messaging behavior: Message shows file upload with name/link (real flow: upload to server and store URL)
+      addMessage(
+        `Uploaded file: ${file.name}`,
+        'system',
+        localUrl,
+        file.name
+      );
+      toast.success(`File "${file.name}" uploaded!`);
+      // Optionally, auto-send message/name to bot API if you want
+      setInput('');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-mystical-teal via-teal-600 to-mystical-green relative overflow-hidden">
-      {/* Animated sparkles */}
+      {/* Sparkles */}
       <div className="absolute top-10 left-10 text-mystical-gold animate-sparkle">
         <Sparkles size={24} />
       </div>
@@ -142,21 +165,33 @@ const Index = () => {
 
       <div className="container mx-auto px-4 py-8 max-w-4xl relative z-10">
         {/* Header */}
-        <header className="text-center mb-8 animate-float">
+        <header className="text-center mb-8 animate-float relative">
           <div className="flex justify-center items-center mb-4 flex-col">
-            {/* Updated logo with user-uploaded image */}
-            <div className="rounded-full bg-white p-1 mb-2 shadow-lg">
-              <img 
-                src="/lovable-uploads/2d8c25c0-04a6-4070-9f86-cf375f3b7528.png"
-                alt="Mistry AI Logo"
-                className="w-24 h-24 rounded-full drop-shadow-lg"
-              />
+            {/* Logo + Info Button */}
+            <div className="relative flex justify-center items-center">
+              <div className="rounded-full bg-white p-1 mb-2 shadow-lg">
+                <img 
+                  src="/lovable-uploads/2d8c25c0-04a6-4070-9f86-cf375f3b7528.png"
+                  alt="Mistry AI Logo"
+                  className="w-24 h-24 rounded-full drop-shadow-lg"
+                />
+              </div>
+              {/* Info Button Overlaid */}
+              <Button
+                className="absolute right-[-18px] top-4 bg-mystical-gold text-mystical-dark rounded-full p-1.5 shadow-md border border-mystical-gold hover:bg-mystical-gold/90"
+                size="icon"
+                variant="secondary"
+                onClick={() => setShowBuilderInfo(true)}
+                style={{ zIndex: 10 }}
+                aria-label="Builder Info"
+              >
+                <Info size={22} />
+              </Button>
             </div>
             <div>
-              <h1 className="font-cinzel text-5xl font-semibold text-white drop-shadow-lg mb-2">
+              <h1 className="font-cinzel-deco text-5xl font-bold text-white drop-shadow-lg mb-2 tracking-wide">
                 Mistry AI
               </h1>
-              {/* Keep English name in "Mistry AI" branding */}
               <p className="font-railway text-xl text-mystical-light/90 mb-2">
                 Mistry AI
               </p>
@@ -190,11 +225,20 @@ const Index = () => {
                       className={`max-w-xs lg:max-w-md px-4 py-3 rounded-lg font-quicksand ${
                         message.sender === 'user'
                           ? 'bg-mystical-gold text-mystical-dark'
-                          : 'bg-white/20 text-mystical-light border border-mystical-gold/20'
+                          : message.sender === 'system'
+                            ? 'bg-mystical-dark/80 text-mystical-gold border border-mystical-gold/60 italic'
+                            : 'bg-white/20 text-mystical-light border border-mystical-gold/20'
                       }`}
                     >
                       <div className="whitespace-pre-wrap break-words">
-                        {message.text}
+                        {message.fileUrl ? (
+                          <a href={message.fileUrl} download={message.fileName} target="_blank" rel="noopener noreferrer"
+                             className="underline hover:text-mystical-gold animate-pulse">
+                            📄 {message.fileName}
+                          </a>
+                        ) : (
+                          message.text
+                        )}
                       </div>
                       <div className="text-xs opacity-70 mt-1">
                         {message.timestamp.toLocaleTimeString()}
@@ -255,8 +299,27 @@ const Index = () => {
           </Button>
         </div>
 
-        {/* Input Area */}
+        {/* Input Area with Upload */}
         <div className="flex gap-3">
+          {/* File Upload Button */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            className="hidden"
+            onChange={handleFileInput}
+            aria-label="Upload file"
+          />
+          <Button
+            variant="secondary"
+            className="bg-mystical-gold/80 hover:bg-mystical-gold text-mystical-dark font-railway"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isLoading}
+            type="button"
+            aria-label="Upload file"
+          >
+            <Upload size={20} className="mr-2" />
+            Upload
+          </Button>
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -274,6 +337,9 @@ const Index = () => {
             Cast
           </Button>
         </div>
+
+        {/* Builder Info Pop-up */}
+        <BuilderInfoDialog open={showBuilderInfo} onOpenChange={setShowBuilderInfo} />
 
         {/* Footer */}
         <footer className="text-center mt-8 text-mystical-light/60 font-quicksand">
