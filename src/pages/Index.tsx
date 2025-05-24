@@ -171,12 +171,12 @@ const Index = () => {
           </p>
         </header>
 
-        {/* Chat Box */}
-        <Card className="bg-white/10 backdrop-blur-sm border-mystical-gold/30 mb-6 h-96 overflow-hidden">
+        {/* Chat Box - Made more compact */}
+        <Card className="bg-white/10 backdrop-blur-sm border-mystical-gold/30 mb-6 h-80 overflow-hidden">
           <div className="h-full flex flex-col">
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {messages.length === 0 ? (
-                <div className="text-center text-mystical-light/70 font-quicksand mt-20">
+                <div className="text-center text-mystical-light/70 font-quicksand mt-16">
                   <Sparkles className="mx-auto mb-4 text-mystical-gold" size={48} />
                   <p className="text-lg">Welcome to the mystical realm...</p>
                   <p className="text-sm">Ask জাদুকর anything, and receive wisdom beyond time</p>
