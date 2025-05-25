@@ -152,7 +152,7 @@ const Index = () => {
       <div className="absolute top-10 left-10 text-mystical-gold animate-sparkle">
         <Sparkles size={24} />
       </div>
-      <div className="absolute top-20 right-16 text-mystical-gold animate-sparkle delay-1000">
+      <div className="absolute top-20 right-16 text-mystical-gold animate-sparkle">
         <Sparkles size={20} />
       </div>
       <div className="absolute bottom-32 left-20 text-mystical-gold animate-sparkle delay-2000">
@@ -168,7 +168,7 @@ const Index = () => {
         style={{
           minWidth: '2.5rem',
           width: '2.75rem',
-          opacity: 0.96
+          opacity: 1
         }}
         size="icon"
         variant="secondary"
@@ -178,7 +178,7 @@ const Index = () => {
         <Info size={24} />
       </Button>
 
-      <div className="container mx-auto px-4 py-8 max-w-4xl relative z-10">
+      <div className="container mx-auto px-4 py-8 max-w-2xl relative z-10">
         {/* Header */}
         <header className="text-center mb-8 animate-float relative">
           <div className="flex justify-center items-center mb-4 flex-col">
