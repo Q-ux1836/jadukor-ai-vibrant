@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -163,39 +162,42 @@ const Index = () => {
         <Sparkles size={22} />
       </div>
 
+      {/* Info Button moved to absolute top-right */}
+      <Button
+        className="fixed top-6 right-8 z-50 bg-white bg-opacity-90 hover:bg-mystical-gold/[0.85] text-mystical-gold border border-mystical-gold transition-all shadow-xl rounded-full p-0 flex items-center justify-center w-11 h-11"
+        style={{
+          minWidth: '2.5rem',
+          width: '2.75rem',
+          opacity: 0.96
+        }}
+        size="icon"
+        variant="secondary"
+        onClick={() => setShowBuilderInfo(true)}
+        aria-label="Builder Info"
+      >
+        <Info size={24} />
+      </Button>
+
       <div className="container mx-auto px-4 py-8 max-w-4xl relative z-10">
         {/* Header */}
         <header className="text-center mb-8 animate-float relative">
           <div className="flex justify-center items-center mb-4 flex-col">
-            {/* Logo + Info Button */}
-            <div className="relative flex justify-center items-center">
-              <div className="rounded-full bg-white p-1 mb-2 shadow-lg">
-                <img 
-                  src="/lovable-uploads/2d8c25c0-04a6-4070-9f86-cf375f3b7528.png"
-                  alt="Mistry AI Logo"
-                  className="w-24 h-24 rounded-full drop-shadow-lg"
-                />
-              </div>
-              {/* Info Button Overlaid */}
-              <Button
-                className="absolute right-[-18px] top-4 bg-mystical-gold text-mystical-dark rounded-full p-1.5 shadow-md border border-mystical-gold hover:bg-mystical-gold/90"
-                size="icon"
-                variant="secondary"
-                onClick={() => setShowBuilderInfo(true)}
-                style={{ zIndex: 10 }}
-                aria-label="Builder Info"
-              >
-                <Info size={22} />
-              </Button>
+            {/* Logo only, Info removed */}
+            <div className="rounded-full bg-white p-1 mb-2 shadow-lg">
+              <img 
+                src="/lovable-uploads/2d8c25c0-04a6-4070-9f86-cf375f3b7528.png"
+                alt="Mistry AI Logo"
+                className="w-24 h-24 rounded-full drop-shadow-lg"
+              />
             </div>
             <div>
               <h1 className="font-cinzel-deco text-5xl font-bold text-white drop-shadow-lg mb-2 tracking-wide">
                 Mistry AI
               </h1>
-              <p className="font-railway text-xl text-mystical-light/90 mb-2">
+              <p className="font-cinzel-deco text-xl text-mystical-light/90 mb-2">
                 Mistry AI
               </p>
-              <p className="font-railway text-xl text-mystical-light/90">
+              <p className="font-cinzel-deco text-xl text-mystical-light/90">
                 The Mystical AI Assistant
               </p>
             </div>
