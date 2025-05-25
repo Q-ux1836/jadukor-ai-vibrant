@@ -30,10 +30,12 @@ const Index = () => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+  // Remove this useEffect for scrolling on every messages change:
+  // useEffect(() => {
+  //   scrollToBottom();
+  // }, [messages]);
 
+  // Instead, only scroll after sending or receiving a message
   const addMessage = (text: string, sender: 'user' | 'bot' | 'system', fileUrl?: string, fileName?: string) => {
     const newMessage: Message = {
       id: Date.now().toString(),
@@ -43,7 +45,16 @@ const Index = () => {
       fileUrl,
       fileName
     };
-    setMessages(prev => [...prev, newMessage]);
+    setMessages(prev => {
+      const updated = [...prev, newMessage];
+      // Scroll to bottom only if user or bot (not during initial page load)
+      setTimeout(() => {
+        if (sender !== 'system' || updated.length > 1) {
+          chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 0);
+      return updated;
+    });
     if (sender === 'bot') {
       lastBotResponse.current = text;
     }
