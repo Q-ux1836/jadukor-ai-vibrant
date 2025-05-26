@@ -145,14 +145,14 @@ const Index = () => {
       // For demo: create local preview URL
       const localUrl = URL.createObjectURL(file);
       // Messaging behavior: Message shows file upload with name/link (real flow: upload to server and store URL)
+      // NOTE: AI assistant currently cannot read or answer about file contents unless backend parses them!
       addMessage(
-        `Uploaded file: ${file.name}`,
+        `📄 Uploaded: ${file.name}\n(NOTE: The AI assistant cannot read file contents unless integrated with AI APIs that can parse uploads)`,
         'system',
         localUrl,
         file.name
       );
       toast.success(`File "${file.name}" uploaded!`);
-      // Optionally, auto-send message/name to bot API if you want
       setInput('');
     }
   };
@@ -282,14 +282,14 @@ const Index = () => {
           <Button
             onClick={() => setCurrentModel(currentModel === 1 ? 2 : 1)}
             variant="secondary"
-            className="bg-white/20 text-mystical-light border-mystical-gold/30 hover:bg-white/30 font-railway"
+            className="bg-white text-mystical-dark border-mystical-gold/30 hover:bg-mystical-gold/20 font-railway"
           >
             Scroll: {currentModel}
           </Button>
           <Button
             onClick={speakResponse}
             variant="secondary"
-            className="bg-white/20 text-mystical-light border-mystical-gold/30 hover:bg-white/30 font-railway"
+            className="bg-white text-mystical-dark border-mystical-gold/30 hover:bg-mystical-gold/20 font-railway"
           >
             <Volume2 size={16} className="mr-2" />
             Speak Wisdom
@@ -297,7 +297,7 @@ const Index = () => {
           <Button
             onClick={startVoiceRecognition}
             variant="secondary"
-            className="bg-white/20 text-mystical-light border-mystical-gold/30 hover:bg-white/30 font-railway"
+            className="bg-white text-mystical-dark border-mystical-gold/30 hover:bg-mystical-gold/20 font-railway"
           >
             <Mic size={16} className="mr-2" />
             Voice Spell
@@ -305,7 +305,7 @@ const Index = () => {
           <Button
             onClick={clearChat}
             variant="secondary"
-            className="bg-white/20 text-mystical-light border-mystical-gold/30 hover:bg-white/30 font-railway"
+            className="bg-white text-mystical-dark border-mystical-gold/30 hover:bg-mystical-gold/20 font-railway"
           >
             <Trash2 size={16} className="mr-2" />
             Clear Scrolls
