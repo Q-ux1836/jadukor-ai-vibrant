@@ -177,24 +177,24 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-50 relative overflow-hidden">
-      {/* Sparkles - made brighter */}
-      <div className="absolute top-10 left-10 text-blue-600 animate-sparkle">
+    <div className="min-h-screen bg-gradient-to-br from-mystical-light via-white to-slate-100 relative overflow-hidden">
+      {/* Sparkles - changed to mystical gold */}
+      <div className="absolute top-10 left-10 text-mystical-gold animate-sparkle">
         <Sparkles size={24} />
       </div>
-      <div className="absolute top-20 right-16 text-blue-600 animate-sparkle">
+      <div className="absolute top-20 right-16 text-mystical-gold animate-sparkle">
         <Sparkles size={20} />
       </div>
-      <div className="absolute bottom-32 left-20 text-blue-600 animate-sparkle delay-2000">
+      <div className="absolute bottom-32 left-20 text-mystical-gold animate-sparkle delay-2000">
         <Sparkles size={28} />
       </div>
-      <div className="absolute bottom-20 right-10 text-blue-600 animate-sparkle delay-500">
+      <div className="absolute bottom-20 right-10 text-mystical-gold animate-sparkle delay-500">
         <Sparkles size={22} />
       </div>
 
-      {/* Info Button */}
+      {/* Info Button - changed to mystical theme */}
       <Button
-        className="fixed top-6 right-8 z-50 bg-white hover:bg-blue-50 text-blue-600 border border-blue-200 transition-all shadow-xl rounded-full p-0 flex items-center justify-center w-11 h-11"
+        className="fixed top-6 right-8 z-50 bg-white hover:bg-mystical-light text-mystical-teal border border-mystical-teal transition-all shadow-xl rounded-full p-0 flex items-center justify-center w-11 h-11"
         size="icon"
         variant="secondary"
         onClick={() => setShowBuilderInfo(true)}
@@ -204,7 +204,7 @@ const Index = () => {
       </Button>
 
       <div className="container mx-auto px-4 py-8 max-w-2xl relative z-10">
-        {/* Header - Updated with Mistry branding */}
+        {/* Header - Updated with mystical colors */}
         <header className="text-center mb-8 animate-float relative">
           <div className="flex justify-center items-center mb-4 flex-col">
             <div className="rounded-full bg-white p-1 mb-2 shadow-lg">
@@ -215,29 +215,29 @@ const Index = () => {
               />
             </div>
             <div>
-              <h1 className="font-cinzel-deco text-4xl font-bold text-blue-800 drop-shadow-lg mb-2 tracking-wide">
+              <h1 className="font-cinzel-deco text-4xl font-bold text-mystical-dark drop-shadow-lg mb-2 tracking-wide">
                 Mistry
               </h1>
-              <p className="font-cinzel-deco text-lg text-blue-600">
+              <p className="font-cinzel-deco text-lg text-mystical-teal">
                 AI Assistant
               </p>
             </div>
           </div>
-          <p className="font-poppins text-blue-500 italic">
+          <p className="font-poppins text-mystical-green italic">
             "Your intelligent companion for every question"
           </p>
         </header>
 
-        {/* Chat Box - Made brighter */}
-        <Card className="bg-white border-blue-200 mb-8 h-80 overflow-hidden shadow-lg">
+        {/* Chat Box - changed to mystical theme */}
+        <Card className="bg-white border-mystical-teal mb-8 h-80 overflow-hidden shadow-lg">
           <div className="h-full flex flex-col">
             <div className="flex-1 overflow-y-auto p-6 space-y-4">
               {messages.length === 0 ? (
                 <div className="flex justify-center items-center h-full">
-                  <div className="bg-white rounded-xl shadow-lg max-w-sm mx-auto p-8 text-center border border-blue-100">
-                    <Sparkles className="mx-auto mb-4 text-blue-500" size={48} />
-                    <p className="text-lg font-semibold text-blue-800 mb-2">Welcome to Mistry AI</p>
-                    <p className="text-sm text-blue-600">Ask me anything and get intelligent responses</p>
+                  <div className="bg-white rounded-xl shadow-lg max-w-sm mx-auto p-8 text-center border border-mystical-teal">
+                    <Sparkles className="mx-auto mb-4 text-mystical-gold" size={48} />
+                    <p className="text-lg font-semibold text-mystical-dark mb-2">Welcome to Mistry AI</p>
+                    <p className="text-sm text-mystical-teal">Ask me anything and get intelligent responses</p>
                   </div>
                 </div>
               ) : (
@@ -249,16 +249,16 @@ const Index = () => {
                     <div
                       className={`max-w-xs lg:max-w-md px-4 py-3 rounded-lg font-quicksand ${
                         message.sender === 'user'
-                          ? 'bg-blue-500 text-white'
+                          ? 'bg-mystical-teal text-white'
                           : message.sender === 'system'
-                            ? 'bg-gray-100 text-blue-800 border border-blue-200 italic'
-                            : 'bg-white text-blue-800 border border-blue-200 shadow-sm'
+                            ? 'bg-gray-100 text-mystical-dark border border-mystical-teal italic'
+                            : 'bg-white text-mystical-dark border border-mystical-teal shadow-sm'
                       }`}
                     >
                       <div className="whitespace-pre-wrap break-words">
                         {message.fileUrl ? (
                           <a href={message.fileUrl} download={message.fileName} target="_blank" rel="noopener noreferrer"
-                             className="underline hover:text-blue-600 animate-pulse">
+                             className="underline hover:text-mystical-green animate-pulse">
                             📄 {message.fileName}
                           </a>
                         ) : (
@@ -274,11 +274,11 @@ const Index = () => {
               )}
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="bg-white text-blue-800 border border-blue-200 shadow-sm px-4 py-3 rounded-lg font-quicksand">
+                  <div className="bg-white text-mystical-dark border border-mystical-teal shadow-sm px-4 py-3 rounded-lg font-quicksand">
                     <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
-                      <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce delay-100"></div>
-                      <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce delay-200"></div>
+                      <div className="w-2 h-2 bg-mystical-teal rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-mystical-teal rounded-full animate-bounce delay-100"></div>
+                      <div className="w-2 h-2 bg-mystical-teal rounded-full animate-bounce delay-200"></div>
                       <span className="ml-2">Mistry AI is thinking...</span>
                     </div>
                   </div>
@@ -289,19 +289,19 @@ const Index = () => {
           </div>
         </Card>
 
-        {/* Controls - Made brighter */}
+        {/* Controls - changed to mystical theme */}
         <div className="flex flex-wrap gap-3 mb-6 justify-center">
           <Button
             onClick={() => setCurrentModel(currentModel === 1 ? 2 : 1)}
             variant="secondary"
-            className="bg-white text-blue-800 border-blue-200 hover:bg-blue-50 font-railway shadow-md"
+            className="bg-white text-mystical-dark border-mystical-teal hover:bg-mystical-light font-railway shadow-md"
           >
             Model: {currentModel}
           </Button>
           <Button
             onClick={speakResponse}
             variant="secondary"
-            className="bg-white text-blue-800 border-blue-200 hover:bg-blue-50 font-railway shadow-md"
+            className="bg-white text-mystical-dark border-mystical-teal hover:bg-mystical-light font-railway shadow-md"
           >
             <Volume2 size={16} className="mr-2" />
             Speak
@@ -309,7 +309,7 @@ const Index = () => {
           <Button
             onClick={startVoiceRecognition}
             variant="secondary"
-            className="bg-white text-blue-800 border-blue-200 hover:bg-blue-50 font-railway shadow-md"
+            className="bg-white text-mystical-dark border-mystical-teal hover:bg-mystical-light font-railway shadow-md"
           >
             <Mic size={16} className="mr-2" />
             Voice
@@ -317,15 +317,15 @@ const Index = () => {
           <Button
             onClick={clearChat}
             variant="secondary"
-            className="bg-white text-blue-800 border-blue-200 hover:bg-blue-50 font-railway shadow-md"
+            className="bg-white text-mystical-dark border-mystical-teal hover:bg-mystical-light font-railway shadow-md"
           >
             <Trash2 size={16} className="mr-2" />
             Clear
           </Button>
         </div>
 
-        {/* Input Area - Made brighter with more white space */}
-        <div className="bg-white rounded-xl shadow-lg border border-blue-200 p-4 mb-6">
+        {/* Input Area - changed to mystical theme */}
+        <div className="bg-white rounded-xl shadow-lg border border-mystical-teal p-4 mb-6">
           <div className="flex gap-3">
             <input
               ref={fileInputRef}
@@ -337,7 +337,7 @@ const Index = () => {
             />
             <Button
               variant="secondary"
-              className="bg-blue-500 hover:bg-blue-600 text-white font-railway shadow-md"
+              className="bg-mystical-teal hover:bg-mystical-green text-white font-railway shadow-md"
               onClick={() => fileInputRef.current?.click()}
               disabled={isLoading}
               type="button"
@@ -351,13 +351,13 @@ const Index = () => {
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Ask Mistry AI anything or upload a text file..."
-              className="flex-1 bg-white border-blue-200 text-blue-800 placeholder-blue-400 font-poppins focus:border-blue-400 focus:ring-blue-400"
+              className="flex-1 bg-white border-mystical-teal text-mystical-dark placeholder-gray-500 font-poppins focus:border-mystical-green focus:ring-mystical-green"
               disabled={isLoading}
             />
             <Button
               onClick={sendMessage}
               disabled={isLoading || !input.trim()}
-              className="bg-blue-500 text-white hover:bg-blue-600 font-railway shadow-md"
+              className="bg-mystical-teal text-white hover:bg-mystical-green font-railway shadow-md"
             >
               <Send size={16} className="mr-2" />
               Send
@@ -368,8 +368,8 @@ const Index = () => {
         {/* Builder Info Pop-up */}
         <BuilderInfoDialog open={showBuilderInfo} onOpenChange={setShowBuilderInfo} />
 
-        {/* Footer */}
-        <footer className="text-center mt-8 text-blue-400 font-quicksand">
+        {/* Footer - changed to mystical theme */}
+        <footer className="text-center mt-8 text-mystical-teal font-quicksand">
           <p>&copy; 2025 Mistry AI - Your intelligent companion</p>
         </footer>
       </div>
