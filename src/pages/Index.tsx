@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -57,7 +56,13 @@ const Index = () => {
   const processFileContent = async (file: File) => {
     if (file.type === 'text/plain') {
       try {
-        const content = await file.readAsText();
+        const content = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = (e) => resolve(e.target?.result as string);
+          reader.onerror = (e) => reject(e);
+          reader.readAsText(file);
+        });
+        
         const prompt = `Please analyze this text file content: ${content}`;
         
         // Send to AI for processing
@@ -117,7 +122,7 @@ const Index = () => {
       addMessage(data.reply, 'bot');
       toast.success('Response received');
     } catch (error) {
-      addMessage('⚠️ Error: Could not connect to the mystical realm. Please try again.', 'bot');
+      addMessage('⚠️ Error: Could not connect to Mistry AI. Please try again.', 'bot');
       toast.error('Failed to get response');
       console.error('Error:', error);
     } finally {
