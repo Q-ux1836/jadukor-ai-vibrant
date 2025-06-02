@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,6 +15,7 @@ interface Message {
   timestamp: Date;
   fileUrl?: string;
   fileName?: string;
+  fileContent?: string;
 }
 
 const Index = () => {
@@ -26,28 +28,27 @@ const Index = () => {
   const lastBotResponse = useRef('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Fix mobile scroll to top on page load
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const scrollToBottom = () => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Remove this useEffect for scrolling on every messages change:
-  // useEffect(() => {
-  //   scrollToBottom();
-  // }, [messages]);
-
-  // Instead, only scroll after sending or receiving a message
-  const addMessage = (text: string, sender: 'user' | 'bot' | 'system', fileUrl?: string, fileName?: string) => {
+  const addMessage = (text: string, sender: 'user' | 'bot' | 'system', fileUrl?: string, fileName?: string, fileContent?: string) => {
     const newMessage: Message = {
       id: Date.now().toString(),
       text,
       sender,
       timestamp: new Date(),
       fileUrl,
-      fileName
+      fileName,
+      fileContent
     };
     setMessages(prev => {
       const updated = [...prev, newMessage];
-      // Scroll to bottom only if user or bot (not during initial page load)
       setTimeout(() => {
         if (sender !== 'system' || updated.length > 1) {
           chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -138,20 +139,39 @@ const Index = () => {
     toast.success('Chat cleared');
   };
 
-  // File upload behavior (just demo - storing local URL, for prod upload to actual backend/storage)
+  // Enhanced file upload with text extraction for AI reading
   const handleFileInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      // For demo: create local preview URL
       const localUrl = URL.createObjectURL(file);
-      // Messaging behavior: Message shows file upload with name/link (real flow: upload to server and store URL)
-      // NOTE: AI assistant currently cannot read or answer about file contents unless backend parses them!
-      addMessage(
-        `📄 Uploaded: ${file.name}\n(NOTE: The AI assistant cannot read file contents unless integrated with AI APIs that can parse uploads)`,
-        'system',
-        localUrl,
-        file.name
-      );
+      
+      // Try to read text content from the file
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const content = e.target?.result as string;
+        let fileContent = '';
+        
+        // Extract text based on file type
+        if (file.type.startsWith('text/') || file.name.endsWith('.txt') || file.name.endsWith('.md')) {
+          fileContent = content;
+        } else if (file.type === 'application/json') {
+          try {
+            fileContent = JSON.stringify(JSON.parse(content), null, 2);
+          } catch {
+            fileContent = content;
+          }
+        }
+        
+        addMessage(
+          `📄 Uploaded: ${file.name}${fileContent ? '\n\nFile content:\n' + fileContent.substring(0, 1000) + (fileContent.length > 1000 ? '...' : '') : '\n(Binary file - content not readable)'}`,
+          'system',
+          localUrl,
+          file.name,
+          fileContent
+        );
+      };
+      
+      reader.readAsText(file);
       toast.success(`File "${file.name}" uploaded!`);
       setInput('');
     }
@@ -173,7 +193,7 @@ const Index = () => {
         <Sparkles size={22} />
       </div>
 
-      {/* Info Button moved to absolute top-right */}
+      {/* Info Button */}
       <Button
         className="fixed top-6 right-8 z-50 bg-white bg-opacity-90 hover:bg-mystical-gold/[0.85] text-mystical-gold border border-mystical-gold transition-all shadow-xl rounded-full p-0 flex items-center justify-center w-11 h-11"
         style={{
@@ -193,7 +213,6 @@ const Index = () => {
         {/* Header */}
         <header className="text-center mb-8 animate-float relative">
           <div className="flex justify-center items-center mb-4 flex-col">
-            {/* Logo only, Info removed */}
             <div className="rounded-full bg-white p-1 mb-2 shadow-lg">
               <img 
                 src="/lovable-uploads/2d8c25c0-04a6-4070-9f86-cf375f3b7528.png"
@@ -247,7 +266,7 @@ const Index = () => {
                         {message.fileUrl ? (
                           <a href={message.fileUrl} download={message.fileName} target="_blank" rel="noopener noreferrer"
                              className="underline hover:text-mystical-gold animate-pulse">
-                            📄 {message.fileName}
+                            {message.text}
                           </a>
                         ) : (
                           message.text
@@ -277,19 +296,19 @@ const Index = () => {
           </div>
         </Card>
 
-        {/* Controls */}
+        {/* Controls - Made white as requested */}
         <div className="flex flex-wrap gap-3 mb-4 justify-center">
           <Button
             onClick={() => setCurrentModel(currentModel === 1 ? 2 : 1)}
             variant="secondary"
-            className="bg-white text-mystical-dark border-mystical-gold/30 hover:bg-mystical-gold/20 font-railway"
+            className="bg-white text-mystical-dark hover:bg-gray-100 font-railway border border-mystical-gold/30"
           >
             Scroll: {currentModel}
           </Button>
           <Button
             onClick={speakResponse}
             variant="secondary"
-            className="bg-white text-mystical-dark border-mystical-gold/30 hover:bg-mystical-gold/20 font-railway"
+            className="bg-white text-mystical-dark hover:bg-gray-100 font-railway border border-mystical-gold/30"
           >
             <Volume2 size={16} className="mr-2" />
             Speak Wisdom
@@ -297,7 +316,7 @@ const Index = () => {
           <Button
             onClick={startVoiceRecognition}
             variant="secondary"
-            className="bg-white text-mystical-dark border-mystical-gold/30 hover:bg-mystical-gold/20 font-railway"
+            className="bg-white text-mystical-dark hover:bg-gray-100 font-railway border border-mystical-gold/30"
           >
             <Mic size={16} className="mr-2" />
             Voice Spell
@@ -305,7 +324,7 @@ const Index = () => {
           <Button
             onClick={clearChat}
             variant="secondary"
-            className="bg-white text-mystical-dark border-mystical-gold/30 hover:bg-mystical-gold/20 font-railway"
+            className="bg-white text-mystical-dark hover:bg-gray-100 font-railway border border-mystical-gold/30"
           >
             <Trash2 size={16} className="mr-2" />
             Clear Scrolls
@@ -314,7 +333,6 @@ const Index = () => {
 
         {/* Input Area with Upload */}
         <div className="flex gap-3">
-          {/* File Upload Button */}
           <input
             ref={fileInputRef}
             type="file"
@@ -351,10 +369,8 @@ const Index = () => {
           </Button>
         </div>
 
-        {/* Builder Info Pop-up */}
         <BuilderInfoDialog open={showBuilderInfo} onOpenChange={setShowBuilderInfo} />
 
-        {/* Footer */}
         <footer className="text-center mt-8 text-mystical-light/60 font-quicksand">
           <p>&copy; 2025 Mistry AI - Where ancient wisdom meets modern intelligence</p>
         </footer>
