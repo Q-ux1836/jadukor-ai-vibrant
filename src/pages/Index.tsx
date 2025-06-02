@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -30,12 +31,6 @@ const Index = () => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Remove this useEffect for scrolling on every messages change:
-  // useEffect(() => {
-  //   scrollToBottom();
-  // }, [messages]);
-
-  // Instead, only scroll after sending or receiving a message
   const addMessage = (text: string, sender: 'user' | 'bot' | 'system', fileUrl?: string, fileName?: string) => {
     const newMessage: Message = {
       id: Date.now().toString(),
@@ -47,7 +42,6 @@ const Index = () => {
     };
     setMessages(prev => {
       const updated = [...prev, newMessage];
-      // Scroll to bottom only if user or bot (not during initial page load)
       setTimeout(() => {
         if (sender !== 'system' || updated.length > 1) {
           chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -57,6 +51,36 @@ const Index = () => {
     });
     if (sender === 'bot') {
       lastBotResponse.current = text;
+    }
+  };
+
+  const processFileContent = async (file: File) => {
+    if (file.type === 'text/plain') {
+      try {
+        const content = await file.readAsText();
+        const prompt = `Please analyze this text file content: ${content}`;
+        
+        // Send to AI for processing
+        const response = await fetch('http://localhost:5000/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt })
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          addMessage(data.reply, 'bot');
+          toast.success('Text file analyzed successfully');
+        } else {
+          throw new Error('Failed to process file');
+        }
+      } catch (error) {
+        addMessage('⚠️ Error processing text file. Using local analysis instead.', 'bot');
+        toast.error('Could not process file with AI');
+      }
+    } else {
+      addMessage(`📄 File uploaded: ${file.name} (Only text files can be analyzed by AI)`, 'system');
+      toast.success(`File "${file.name}" uploaded!`);
     }
   };
 
@@ -138,49 +162,33 @@ const Index = () => {
     toast.success('Chat cleared');
   };
 
-  // File upload behavior (just demo - storing local URL, for prod upload to actual backend/storage)
   const handleFileInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      // For demo: create local preview URL
-      const localUrl = URL.createObjectURL(file);
-      // Messaging behavior: Message shows file upload with name/link (real flow: upload to server and store URL)
-      // NOTE: AI assistant currently cannot read or answer about file contents unless backend parses them!
-      addMessage(
-        `📄 Uploaded: ${file.name}\n(NOTE: The AI assistant cannot read file contents unless integrated with AI APIs that can parse uploads)`,
-        'system',
-        localUrl,
-        file.name
-      );
-      toast.success(`File "${file.name}" uploaded!`);
+      processFileContent(file);
       setInput('');
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-mystical-teal via-teal-600 to-mystical-green relative overflow-hidden">
-      {/* Sparkles */}
-      <div className="absolute top-10 left-10 text-mystical-gold animate-sparkle">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-50 relative overflow-hidden">
+      {/* Sparkles - made brighter */}
+      <div className="absolute top-10 left-10 text-blue-600 animate-sparkle">
         <Sparkles size={24} />
       </div>
-      <div className="absolute top-20 right-16 text-mystical-gold animate-sparkle">
+      <div className="absolute top-20 right-16 text-blue-600 animate-sparkle">
         <Sparkles size={20} />
       </div>
-      <div className="absolute bottom-32 left-20 text-mystical-gold animate-sparkle delay-2000">
+      <div className="absolute bottom-32 left-20 text-blue-600 animate-sparkle delay-2000">
         <Sparkles size={28} />
       </div>
-      <div className="absolute bottom-20 right-10 text-mystical-gold animate-sparkle delay-500">
+      <div className="absolute bottom-20 right-10 text-blue-600 animate-sparkle delay-500">
         <Sparkles size={22} />
       </div>
 
-      {/* Info Button moved to absolute top-right */}
+      {/* Info Button */}
       <Button
-        className="fixed top-6 right-8 z-50 bg-white bg-opacity-90 hover:bg-mystical-gold/[0.85] text-mystical-gold border border-mystical-gold transition-all shadow-xl rounded-full p-0 flex items-center justify-center w-11 h-11"
-        style={{
-          minWidth: '2.5rem',
-          width: '2.75rem',
-          opacity: 1
-        }}
+        className="fixed top-6 right-8 z-50 bg-white hover:bg-blue-50 text-blue-600 border border-blue-200 transition-all shadow-xl rounded-full p-0 flex items-center justify-center w-11 h-11"
         size="icon"
         variant="secondary"
         onClick={() => setShowBuilderInfo(true)}
@@ -190,43 +198,41 @@ const Index = () => {
       </Button>
 
       <div className="container mx-auto px-4 py-8 max-w-2xl relative z-10">
-        {/* Header */}
+        {/* Header - Updated with Mistry branding */}
         <header className="text-center mb-8 animate-float relative">
           <div className="flex justify-center items-center mb-4 flex-col">
-            {/* Logo only, Info removed */}
             <div className="rounded-full bg-white p-1 mb-2 shadow-lg">
               <img 
                 src="/lovable-uploads/2d8c25c0-04a6-4070-9f86-cf375f3b7528.png"
                 alt="Mistry AI Logo"
-                className="w-24 h-24 rounded-full drop-shadow-lg"
+                className="w-20 h-20 rounded-full drop-shadow-lg"
               />
             </div>
             <div>
-              <h1 className="font-cinzel-deco text-5xl font-bold text-white drop-shadow-lg mb-2 tracking-wide">
-                Mistry AI
+              <h1 className="font-cinzel-deco text-4xl font-bold text-blue-800 drop-shadow-lg mb-2 tracking-wide">
+                Mistry
               </h1>
-              <p className="font-cinzel-deco text-xl text-mystical-light/90 mb-2">
-                Mistry AI
-              </p>
-              <p className="font-cinzel-deco text-xl text-mystical-light/90">
-                The Mystical AI Assistant
+              <p className="font-cinzel-deco text-lg text-blue-600">
+                AI Assistant
               </p>
             </div>
           </div>
-          <p className="font-poppins text-mystical-light/80 italic">
-            "Wisdom from ancient scrolls, powered by modern enchantments"
+          <p className="font-poppins text-blue-500 italic">
+            "Your intelligent companion for every question"
           </p>
         </header>
 
-        {/* Chat Box */}
-        <Card className="bg-white/10 backdrop-blur-sm border-mystical-gold/30 mb-6 h-80 overflow-hidden">
+        {/* Chat Box - Made brighter */}
+        <Card className="bg-white border-blue-200 mb-8 h-80 overflow-hidden shadow-lg">
           <div className="h-full flex flex-col">
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="flex-1 overflow-y-auto p-6 space-y-4">
               {messages.length === 0 ? (
-                <div className="text-center text-mystical-light/70 font-quicksand mt-16">
-                  <Sparkles className="mx-auto mb-4 text-mystical-gold" size={48} />
-                  <p className="text-lg">Welcome to the mystical realm...</p>
-                  <p className="text-sm">Ask Mistry AI anything, and receive wisdom beyond time</p>
+                <div className="flex justify-center items-center h-full">
+                  <div className="bg-white rounded-xl shadow-lg max-w-sm mx-auto p-8 text-center border border-blue-100">
+                    <Sparkles className="mx-auto mb-4 text-blue-500" size={48} />
+                    <p className="text-lg font-semibold text-blue-800 mb-2">Welcome to Mistry AI</p>
+                    <p className="text-sm text-blue-600">Ask me anything and get intelligent responses</p>
+                  </div>
                 </div>
               ) : (
                 messages.map((message) => (
@@ -237,16 +243,16 @@ const Index = () => {
                     <div
                       className={`max-w-xs lg:max-w-md px-4 py-3 rounded-lg font-quicksand ${
                         message.sender === 'user'
-                          ? 'bg-mystical-gold text-mystical-dark'
+                          ? 'bg-blue-500 text-white'
                           : message.sender === 'system'
-                            ? 'bg-mystical-dark/80 text-mystical-gold border border-mystical-gold/60 italic'
-                            : 'bg-white/20 text-mystical-light border border-mystical-gold/20'
+                            ? 'bg-gray-100 text-blue-800 border border-blue-200 italic'
+                            : 'bg-white text-blue-800 border border-blue-200 shadow-sm'
                       }`}
                     >
                       <div className="whitespace-pre-wrap break-words">
                         {message.fileUrl ? (
                           <a href={message.fileUrl} download={message.fileName} target="_blank" rel="noopener noreferrer"
-                             className="underline hover:text-mystical-gold animate-pulse">
+                             className="underline hover:text-blue-600 animate-pulse">
                             📄 {message.fileName}
                           </a>
                         ) : (
@@ -262,12 +268,12 @@ const Index = () => {
               )}
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="bg-white/20 text-mystical-light border border-mystical-gold/20 px-4 py-3 rounded-lg font-quicksand">
+                  <div className="bg-white text-blue-800 border border-blue-200 shadow-sm px-4 py-3 rounded-lg font-quicksand">
                     <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-mystical-gold rounded-full animate-bounce"></div>
-                      <div className="w-2 h-2 bg-mystical-gold rounded-full animate-bounce delay-100"></div>
-                      <div className="w-2 h-2 bg-mystical-gold rounded-full animate-bounce delay-200"></div>
-                      <span className="ml-2">Mistry AI is consulting the ancient texts...</span>
+                      <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce delay-100"></div>
+                      <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce delay-200"></div>
+                      <span className="ml-2">Mistry AI is thinking...</span>
                     </div>
                   </div>
                 </div>
@@ -277,86 +283,88 @@ const Index = () => {
           </div>
         </Card>
 
-        {/* Controls */}
-        <div className="flex flex-wrap gap-3 mb-4 justify-center">
+        {/* Controls - Made brighter */}
+        <div className="flex flex-wrap gap-3 mb-6 justify-center">
           <Button
             onClick={() => setCurrentModel(currentModel === 1 ? 2 : 1)}
             variant="secondary"
-            className="bg-white text-mystical-dark border-mystical-gold/30 hover:bg-mystical-gold/20 font-railway"
+            className="bg-white text-blue-800 border-blue-200 hover:bg-blue-50 font-railway shadow-md"
           >
-            Scroll: {currentModel}
+            Model: {currentModel}
           </Button>
           <Button
             onClick={speakResponse}
             variant="secondary"
-            className="bg-white text-mystical-dark border-mystical-gold/30 hover:bg-mystical-gold/20 font-railway"
+            className="bg-white text-blue-800 border-blue-200 hover:bg-blue-50 font-railway shadow-md"
           >
             <Volume2 size={16} className="mr-2" />
-            Speak Wisdom
+            Speak
           </Button>
           <Button
             onClick={startVoiceRecognition}
             variant="secondary"
-            className="bg-white text-mystical-dark border-mystical-gold/30 hover:bg-mystical-gold/20 font-railway"
+            className="bg-white text-blue-800 border-blue-200 hover:bg-blue-50 font-railway shadow-md"
           >
             <Mic size={16} className="mr-2" />
-            Voice Spell
+            Voice
           </Button>
           <Button
             onClick={clearChat}
             variant="secondary"
-            className="bg-white text-mystical-dark border-mystical-gold/30 hover:bg-mystical-gold/20 font-railway"
+            className="bg-white text-blue-800 border-blue-200 hover:bg-blue-50 font-railway shadow-md"
           >
             <Trash2 size={16} className="mr-2" />
-            Clear Scrolls
+            Clear
           </Button>
         </div>
 
-        {/* Input Area with Upload */}
-        <div className="flex gap-3">
-          {/* File Upload Button */}
-          <input
-            ref={fileInputRef}
-            type="file"
-            className="hidden"
-            onChange={handleFileInput}
-            aria-label="Upload file"
-          />
-          <Button
-            variant="secondary"
-            className="bg-mystical-gold/80 hover:bg-mystical-gold text-mystical-dark font-railway"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={isLoading}
-            type="button"
-            aria-label="Upload file"
-          >
-            <Upload size={20} className="mr-2" />
-            Upload
-          </Button>
-          <Input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Speak your query to Mistry AI..."
-            className="flex-1 bg-white/20 border-mystical-gold/30 text-mystical-light placeholder-mystical-light/60 font-poppins"
-            disabled={isLoading}
-          />
-          <Button
-            onClick={sendMessage}
-            disabled={isLoading || !input.trim()}
-            className="bg-mystical-gold text-mystical-dark hover:bg-mystical-gold/80 font-railway"
-          >
-            <Send size={16} className="mr-2" />
-            Cast
-          </Button>
+        {/* Input Area - Made brighter with more white space */}
+        <div className="bg-white rounded-xl shadow-lg border border-blue-200 p-4 mb-6">
+          <div className="flex gap-3">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".txt"
+              className="hidden"
+              onChange={handleFileInput}
+              aria-label="Upload text file"
+            />
+            <Button
+              variant="secondary"
+              className="bg-blue-500 hover:bg-blue-600 text-white font-railway shadow-md"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isLoading}
+              type="button"
+              aria-label="Upload text file"
+            >
+              <Upload size={20} className="mr-2" />
+              Upload Text
+            </Button>
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Ask Mistry AI anything or upload a text file..."
+              className="flex-1 bg-white border-blue-200 text-blue-800 placeholder-blue-400 font-poppins focus:border-blue-400 focus:ring-blue-400"
+              disabled={isLoading}
+            />
+            <Button
+              onClick={sendMessage}
+              disabled={isLoading || !input.trim()}
+              className="bg-blue-500 text-white hover:bg-blue-600 font-railway shadow-md"
+            >
+              <Send size={16} className="mr-2" />
+              Send
+            </Button>
+          </div>
         </div>
 
         {/* Builder Info Pop-up */}
         <BuilderInfoDialog open={showBuilderInfo} onOpenChange={setShowBuilderInfo} />
 
         {/* Footer */}
-        <footer className="text-center mt-8 text-mystical-light/60 font-quicksand">
-          <p>&copy; 2025 Mistry AI - Where ancient wisdom meets modern intelligence</p>
+        <footer className="text-center mt-8 text-blue-400 font-quicksand">
+          <p>&copy; 2025 Mistry AI - Your intelligent companion</p>
         </footer>
       </div>
     </div>
