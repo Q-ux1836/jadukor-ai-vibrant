@@ -242,10 +242,16 @@ const Index = () => {
           <div className="h-full flex flex-col">
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {messages.length === 0 ? (
-                <div className="text-center text-mystical-light/70 font-quicksand mt-16">
-                  <Sparkles className="mx-auto mb-4 text-mystical-gold" size={48} />
-                  <p className="text-lg">Welcome to the mystical realm...</p>
-                  <p className="text-sm">Ask Mistry AI anything, and receive wisdom beyond time</p>
+                <div className="text-center mt-8">
+                  <div className="bg-white rounded-lg p-8 mx-auto max-w-md shadow-lg">
+                    <Sparkles className="mx-auto mb-4 text-mystical-gold" size={48} />
+                    <h3 className="text-xl font-quicksand font-semibold text-mystical-dark mb-3">
+                      Welcome to the mystical realm...
+                    </h3>
+                    <p className="text-mystical-dark/80 font-quicksand">
+                      Ask Mistry AI anything, and receive wisdom beyond time
+                    </p>
+                  </div>
                 </div>
               ) : (
                 messages.map((message) => (
