@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,6 +23,8 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentModel, setCurrentModel] = useState(1);
   const [showBuilderInfo, setShowBuilderInfo] = useState(false);
+  const [uploadedFileContent, setUploadedFileContent] = useState<string>('');
+  const [uploadedFileName, setUploadedFileName] = useState<string>('');
   const chatEndRef = useRef<HTMLDivElement>(null);
   const lastBotResponse = useRef('');
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -62,16 +63,25 @@ const Index = () => {
   };
 
   const sendMessage = async () => {
-    if (!input.trim()) return;
+    if (!input.trim() && !uploadedFileContent) return;
 
-    const userMessage = input.trim();
+    let fullPrompt = input.trim();
+    
+    // Combine text input with file content if available
+    if (uploadedFileContent) {
+      fullPrompt = `${fullPrompt}\n\nFile: ${uploadedFileName}\nFile Content:\n${uploadedFileContent}`;
+      // Clear the uploaded file after sending
+      setUploadedFileContent('');
+      setUploadedFileName('');
+    }
+
     setInput('');
-    addMessage(userMessage, 'user');
+    addMessage(input.trim() || `Analyzing file: ${uploadedFileName}`, 'user');
     setIsLoading(true);
 
     try {
-      if (isMathProblem(userMessage)) {
-        const localSolution = solveMathProblem(userMessage);
+      if (isMathProblem(fullPrompt)) {
+        const localSolution = solveMathProblem(fullPrompt);
         if (localSolution) {
           setTimeout(() => {
             addMessage(localSolution, 'bot');
@@ -85,7 +95,7 @@ const Index = () => {
       const response = await fetch('http://localhost:5000/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: userMessage })
+        body: JSON.stringify({ prompt: fullPrompt })
       });
 
       if (!response.ok) throw new Error('Network response was not ok');
@@ -162,8 +172,12 @@ const Index = () => {
           }
         }
         
+        // Store file content for sending with next message
+        setUploadedFileContent(fileContent);
+        setUploadedFileName(file.name);
+        
         addMessage(
-          `📄 Uploaded: ${file.name}${fileContent ? '\n\nFile content:\n' + fileContent.substring(0, 1000) + (fileContent.length > 1000 ? '...' : '') : '\n(Binary file - content not readable)'}`,
+          `📄 File ready: ${file.name}${fileContent ? '\n\nPreview:\n' + fileContent.substring(0, 200) + (fileContent.length > 200 ? '...' : '') : '\n(Binary file - will attempt to process)'}`,
           'system',
           localUrl,
           file.name,
@@ -172,8 +186,7 @@ const Index = () => {
       };
       
       reader.readAsText(file);
-      toast.success(`File "${file.name}" uploaded!`);
-      setInput('');
+      toast.success(`File "${file.name}" ready to send!`);
     }
   };
 
@@ -361,13 +374,13 @@ const Index = () => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Speak your query to Mistry AI..."
+            placeholder={uploadedFileContent ? `File ready: ${uploadedFileName} - Add your question...` : "Speak your query to Mistry AI..."}
             className="flex-1 bg-white/20 border-mystical-gold/30 text-mystical-light placeholder-mystical-light/60 font-poppins"
             disabled={isLoading}
           />
           <Button
             onClick={sendMessage}
-            disabled={isLoading || !input.trim()}
+            disabled={isLoading || (!input.trim() && !uploadedFileContent)}
             className="bg-mystical-gold text-mystical-dark hover:bg-mystical-gold/80 font-railway"
           >
             <Send size={16} className="mr-2" />
