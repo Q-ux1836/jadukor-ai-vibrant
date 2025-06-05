@@ -8,7 +8,7 @@ Welcome to Mistry AI, your mystical AI assistant powered by ancient wisdom and m
 ### Option 1: Standalone Version (Recommended for GitHub Downloads)
 1. Download the repository from GitHub
 2. Open `standalone.html` in any web browser
-3. That's it! The app works immediately with all features
+3. That's it! The app works immediately with **100% identical functionality** to the Lovable editor
 
 ### Option 2: Development Version
 1. Clone this repository
@@ -20,6 +20,18 @@ Welcome to Mistry AI, your mystical AI assistant powered by ancient wisdom and m
 1. Install dependencies: `npm install`
 2. Build the project: `npm run build`
 3. Serve the `dist` folder with any web server
+
+## ⚡ Standalone vs Lovable Editor - Identical Experience
+
+The `standalone.html` file provides **exactly the same experience** as what you see in the Lovable editor:
+
+- ✅ **Identical UI/UX** - Same mystical theme, animations, and layout
+- ✅ **Same file processing** - Upload and analyze files with AI memory
+- ✅ **Same math capabilities** - Instant local calculation without internet
+- ✅ **Same voice features** - Voice recognition and text-to-speech
+- ✅ **Same interactivity** - All buttons, controls, and features work identically
+- ✅ **Same visual effects** - Sparkles, animations, and mystical styling
+- ✅ **Same responses** - Smart offline responses when backend unavailable
 
 ## 📋 Features
 
@@ -50,6 +62,7 @@ Welcome to Mistry AI, your mystical AI assistant powered by ancient wisdom and m
 - **Complete functionality** - all features included
 - **Offline capable** - math solving and file analysis work without internet
 - **Browser compatibility** - works in all modern browsers
+- **100% identical** - exact same experience as Lovable editor
 
 ### Development Version
 - Built with **React 18** and **TypeScript**
