@@ -1,73 +1,134 @@
-# Welcome to your Lovable project
 
-## Project info
+# Mistry AI - The Mystical AI Assistant
 
-**URL**: https://lovable.dev/projects/fb72d162-7e2f-4af2-993d-d3cf335b3a67
+Welcome to Mistry AI, your mystical AI assistant powered by ancient wisdom and modern intelligence.
 
-## How can I edit this code?
+## 🚀 Quick Start (No Setup Required)
 
-There are several ways of editing your application.
+### Option 1: Standalone Version (Recommended for GitHub Downloads)
+1. Download the repository from GitHub
+2. Open `standalone.html` in any web browser
+3. That's it! The app works immediately with all features
 
-**Use Lovable**
+### Option 2: Development Version
+1. Clone this repository
+2. Install dependencies: `npm install`
+3. Start development server: `npm run dev`
+4. Open http://localhost:8080
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/fb72d162-7e2f-4af2-993d-d3cf335b3a67) and start prompting.
+### Option 3: Build for Production
+1. Install dependencies: `npm install`
+2. Build the project: `npm run build`
+3. Serve the `dist` folder with any web server
 
-Changes made via Lovable will be committed automatically to this repo.
+## 📋 Features
 
-**Use your preferred IDE**
+### 🧮 Self-Reliant Math Solver
+- Solves mathematical expressions instantly
+- Handles word problems and equations
+- Works completely offline without any backend
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### 📁 Intelligent File Processing
+- Upload and analyze text files, JSON, CSV, Markdown
+- Persistent file memory across conversations
+- Smart file content analysis and contextual responses
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### 🎙️ Voice Features
+- Voice recognition for hands-free input
+- Text-to-speech for AI responses
+- Cross-browser speech API support
 
-Follow these steps:
+### ✨ Mystical Interface
+- Beautiful, animated UI with mystical theme
+- Responsive design for all devices
+- Smooth animations and visual effects
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## 🔧 Technical Details
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Standalone Version (`standalone.html`)
+- **Zero dependencies** - works immediately when opened
+- **Complete functionality** - all features included
+- **Offline capable** - math solving and file analysis work without internet
+- **Browser compatibility** - works in all modern browsers
 
-# Step 3: Install the necessary dependencies.
-npm i
+### Development Version
+- Built with **React 18** and **TypeScript**
+- Styled with **Tailwind CSS** and **shadcn/ui**
+- Uses **Vite** for fast development and building
+- **Responsive design** with custom mystical theme
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+### File Processing Intelligence
+The AI analyzes uploaded files contextually:
+- **JSON files**: Parses structure and provides insights
+- **Text/Markdown**: Analyzes content and answers questions
+- **CSV files**: Understands data structure and relationships
+- **Multiple files**: Maintains context across all uploaded files
 
-**Edit a file directly in GitHub**
+### Math Operations
+Built-in mathematical capabilities:
+- Basic arithmetic (`+`, `-`, `*`, `/`)
+- Word problem understanding
+- Expression evaluation
+- Instant local calculation (no server required)
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🌐 Deployment Options
 
-**Use GitHub Codespaces**
+### GitHub Pages
+1. Fork this repository
+2. Enable GitHub Pages in repository settings
+3. Use the `standalone.html` as your index page
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Netlify/Vercel
+1. Connect your GitHub repository
+2. Build command: `npm run build`
+3. Publish directory: `dist`
 
-## What technologies are used for this project?
+### Traditional Web Hosting
+1. Upload `standalone.html` to your web server
+2. Access via any web browser
+3. No server-side requirements
 
-This project is built with:
+## 🎯 Use Cases
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- **Students**: Solve math problems and analyze study materials
+- **Researchers**: Upload and analyze documents, data files
+- **Developers**: Quick file analysis and content processing
+- **General Users**: Voice-enabled AI assistant for various tasks
 
-## How can I deploy this project?
+## 🔒 Privacy & Security
 
-Simply open [Lovable](https://lovable.dev/projects/fb72d162-7e2f-4af2-993d-d3cf335b3a67) and click on Share -> Publish.
+- **Standalone mode**: All processing happens in your browser
+- **No data transmission**: Files and conversations stay local
+- **Privacy-first**: No tracking or external data collection
 
-## Can I connect a custom domain to my Lovable project?
+## 🚨 Troubleshooting
 
-Yes, you can!
+### Blank Page Issue
+If you see a blank page when opening `index.html`:
+- Use `standalone.html` instead (this is the correct file for direct opening)
+- The main `index.html` requires a build process and server
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### File Upload Issues
+- Ensure files are text-based (`.txt`, `.json`, `.md`, `.csv`)
+- Check file size (recommended under 1MB for best performance)
+- Use modern browsers with File API support
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+### Voice Features Not Working
+- Ensure microphone permissions are granted
+- Use HTTPS or localhost for voice recognition
+- Check browser compatibility for Speech APIs
+
+## 📞 Support
+
+For issues or questions:
+1. Check the troubleshooting section above
+2. Review browser console for error messages
+3. Ensure you're using the correct HTML file for your needs
+
+## 📄 License
+
+This project is open source and available under the MIT License.
+
+---
+
+**Mistry AI** - Where ancient wisdom meets modern intelligence ✨

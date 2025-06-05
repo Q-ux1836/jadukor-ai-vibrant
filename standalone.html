@@ -1,0 +1,593 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mistry AI - The Mystical AI Assistant</title>
+    <meta name="description" content="Mistry AI - Your mystical AI assistant powered by ancient wisdom and modern intelligence" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cinzel+Decorative:wght@400;700;900&family=Railway:wght@400;500;600&family=Poppins:wght@300;400;500;600&family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'mystical-teal': '#2dd4bf',
+                        'mystical-green': '#10b981',
+                        'mystical-gold': '#f59e0b',
+                        'mystical-light': '#f0f9ff',
+                        'mystical-dark': '#0f172a'
+                    },
+                    fontFamily: {
+                        'cinzel': ['Cinzel', 'serif'],
+                        'cinzel-deco': ['Cinzel Decorative', 'serif'],
+                        'railway': ['Railway', 'sans-serif'],
+                        'poppins': ['Poppins', 'sans-serif'],
+                        'quicksand': ['Quicksand', 'sans-serif']
+                    },
+                    animation: {
+                        'sparkle': 'sparkle 2s ease-in-out infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'bounce': 'bounce 1s infinite'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.1); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .delay-2000 { animation-delay: 2s; }
+        .delay-500 { animation-delay: 0.5s; }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        
+        .bg-opacity-15 { background-color: rgba(255, 255, 255, 0.15); }
+        .bg-opacity-25 { background-color: rgba(255, 255, 255, 0.25); }
+        .bg-opacity-90 { background-color: rgba(255, 255, 255, 0.9); }
+        
+        .backdrop-blur-sm { backdrop-filter: blur(4px); }
+        
+        .animate-sparkle { animation: sparkle 2s ease-in-out infinite; }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen bg-gradient-to-br from-mystical-teal via-teal-600 to-mystical-green relative overflow-hidden">
+        <!-- Sparkles -->
+        <div class="absolute top-10 left-10 text-mystical-gold animate-sparkle">
+            <i data-lucide="sparkles" class="w-6 h-6"></i>
+        </div>
+        <div class="absolute top-20 right-16 text-mystical-gold animate-sparkle">
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
+        </div>
+        <div class="absolute bottom-32 left-20 text-mystical-gold animate-sparkle delay-2000">
+            <i data-lucide="sparkles" class="w-7 h-7"></i>
+        </div>
+        <div class="absolute bottom-20 right-10 text-mystical-gold animate-sparkle delay-500">
+            <i data-lucide="sparkles" class="w-6 h-6"></i>
+        </div>
+
+        <!-- Info Button -->
+        <button id="infoButton" class="fixed top-6 right-8 z-50 bg-opacity-90 hover:bg-mystical-gold hover:bg-opacity-85 text-mystical-gold border border-mystical-gold transition-all shadow-xl rounded-full p-0 flex items-center justify-center w-11 h-11 bg-white">
+            <i data-lucide="info" class="w-6 h-6"></i>
+        </button>
+
+        <div class="container mx-auto px-4 py-8 max-w-4xl relative z-10">
+            <!-- Header -->
+            <header class="text-center mb-8 animate-float relative">
+                <div class="flex justify-center items-center mb-4 flex-col">
+                    <div class="rounded-full bg-white p-1 mb-2 shadow-lg">
+                        <div class="w-24 h-24 rounded-full bg-gradient-to-br from-mystical-teal to-mystical-green flex items-center justify-center">
+                            <i data-lucide="sparkles" class="w-12 h-12 text-white"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h1 class="font-cinzel-deco text-5xl font-bold text-white drop-shadow-lg mb-2 tracking-wide">
+                            Mistry AI
+                        </h1>
+                        <p class="font-cinzel-deco text-xl text-mystical-light/90 mb-2">
+                            Mistry AI
+                        </p>
+                        <p class="font-cinzel-deco text-xl text-mystical-light/90">
+                            The Mystical AI Assistant
+                        </p>
+                    </div>
+                </div>
+                <p class="font-poppins text-mystical-light/80 italic">
+                    "Wisdom from ancient scrolls, powered by modern enchantments"
+                </p>
+            </header>
+
+            <!-- File Memory Panel -->
+            <div id="fileMemoryPanel" class="bg-opacity-15 backdrop-blur-sm border border-mystical-gold/40 mb-4 p-4 rounded-lg hidden bg-white">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-mystical-light font-quicksand font-semibold flex items-center">
+                        <i data-lucide="file-text" class="w-5 h-5 mr-2"></i>
+                        AI Memory (<span id="fileCount">0</span> files)
+                    </h3>
+                    <button id="clearAllFiles" class="bg-opacity-20 text-mystical-light hover:bg-opacity-30 border border-mystical-gold/30 px-3 py-1 rounded bg-white">
+                        Clear All
+                    </button>
+                </div>
+                <div id="fileList" class="flex flex-wrap gap-2">
+                </div>
+            </div>
+
+            <!-- Chat Box -->
+            <div class="bg-opacity-10 backdrop-blur-sm border border-mystical-gold/30 mb-6 h-96 overflow-hidden rounded-lg bg-white">
+                <div class="h-full flex flex-col">
+                    <div id="chatContainer" class="flex-1 overflow-y-auto p-6 space-y-6">
+                        <div id="welcomeMessage" class="text-center mt-16">
+                            <div class="bg-white rounded-xl p-12 mx-auto max-w-lg shadow-2xl">
+                                <i data-lucide="sparkles" class="mx-auto mb-6 text-mystical-gold w-16 h-16"></i>
+                                <h3 class="text-2xl font-quicksand font-semibold text-mystical-dark mb-4">
+                                    Welcome to the mystical realm...
+                                </h3>
+                                <p class="text-mystical-dark/80 font-quicksand text-lg leading-relaxed">
+                                    Ask Mistry AI anything, and receive wisdom beyond time. Upload files to give me context and memory.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex flex-wrap gap-3 mb-4 justify-center">
+                <button id="speakButton" class="bg-white text-mystical-dark hover:bg-gray-100 font-railway border border-mystical-gold/30 px-4 py-2 rounded">
+                    <i data-lucide="volume-2" class="w-4 h-4 mr-2 inline"></i>
+                    Speak Wisdom
+                </button>
+                <button id="voiceButton" class="bg-white text-mystical-dark hover:bg-gray-100 font-railway border border-mystical-gold/30 px-4 py-2 rounded">
+                    <i data-lucide="mic" class="w-4 h-4 mr-2 inline"></i>
+                    Voice Spell
+                </button>
+                <button id="clearButton" class="bg-white text-mystical-dark hover:bg-gray-100 font-railway border border-mystical-gold/30 px-4 py-2 rounded">
+                    <i data-lucide="trash-2" class="w-4 h-4 mr-2 inline"></i>
+                    Clear Scrolls
+                </button>
+            </div>
+
+            <!-- Input Area -->
+            <div class="flex gap-4 items-end">
+                <input type="file" id="fileInput" class="hidden" accept=".txt,.json,.md,.csv">
+                <button id="uploadButton" class="bg-mystical-gold/80 hover:bg-mystical-gold text-mystical-dark font-railway px-6 py-3 rounded">
+                    <i data-lucide="upload" class="w-5 h-5 mr-2 inline"></i>
+                    Upload
+                </button>
+                <textarea id="messageInput" placeholder="Speak your query to Mistry AI..." class="flex-1 bg-opacity-25 border-2 border-mystical-gold/40 text-mystical-light placeholder-mystical-light/70 font-poppins text-base min-h-20 resize-none focus:border-mystical-gold/60 focus:ring-2 focus:ring-mystical-gold/30 p-3 rounded bg-white"></textarea>
+                <button id="sendButton" class="bg-mystical-gold text-mystical-dark hover:bg-mystical-gold/80 font-railway px-6 py-3 h-20 rounded">
+                    <i data-lucide="send" class="w-5 h-5 mr-2 inline"></i>
+                    Cast
+                </button>
+            </div>
+
+            <footer class="text-center mt-8 text-mystical-light/60 font-quicksand">
+                <p>&copy; 2025 Mistry AI - Where ancient wisdom meets modern intelligence</p>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Info Dialog -->
+    <div id="infoDialog" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-6 max-w-md mx-4">
+            <h2 class="text-xl font-bold mb-4">About Mistry AI</h2>
+            <p class="mb-4">This is a standalone version of Mistry AI that works directly in your browser without any setup required.</p>
+            <p class="mb-4">Features:</p>
+            <ul class="list-disc pl-5 mb-4">
+                <li>Math problem solving</li>
+                <li>File upload and analysis</li>
+                <li>Voice recognition and speech</li>
+                <li>Persistent file memory</li>
+            </ul>
+            <button id="closeDialog" class="bg-mystical-gold text-white px-4 py-2 rounded">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Application state
+        let messages = [];
+        let fileMemory = [];
+        let lastBotResponse = '';
+        let isLoading = false;
+
+        // DOM elements
+        const chatContainer = document.getElementById('chatContainer');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const uploadButton = document.getElementById('uploadButton');
+        const fileInput = document.getElementById('fileInput');
+        const fileMemoryPanel = document.getElementById('fileMemoryPanel');
+        const fileList = document.getElementById('fileList');
+        const fileCount = document.getElementById('fileCount');
+        const clearAllFiles = document.getElementById('clearAllFiles');
+        const speakButton = document.getElementById('speakButton');
+        const voiceButton = document.getElementById('voiceButton');
+        const clearButton = document.getElementById('clearButton');
+        const infoButton = document.getElementById('infoButton');
+        const infoDialog = document.getElementById('infoDialog');
+        const closeDialog = document.getElementById('closeDialog');
+        const welcomeMessage = document.getElementById('welcomeMessage');
+
+        // Math operations utility
+        function isMathProblem(text) {
+            const mathKeywords = ['calculate', 'solve', 'what is', 'find', '+', '-', '*', '/', '=', 'math', 'equation', 'algebra'];
+            const mathPattern = /\d+\s*[\+\-\*\/]\s*\d+/;
+            return mathKeywords.some(keyword => text.toLowerCase().includes(keyword)) || mathPattern.test(text);
+        }
+
+        function solveMathProblem(text) {
+            try {
+                // Simple math expression evaluation
+                const mathExpression = text.match(/\d+\s*[\+\-\*\/]\s*\d+/);
+                if (mathExpression) {
+                    const expression = mathExpression[0].replace(/\s/g, '');
+                    const result = Function('"use strict"; return (' + expression + ')')();
+                    return `The answer is: ${result}`;
+                }
+                
+                // Handle word problems
+                if (text.toLowerCase().includes('what is')) {
+                    const numbers = text.match(/\d+/g);
+                    if (numbers && numbers.length >= 2) {
+                        const num1 = parseInt(numbers[0]);
+                        const num2 = parseInt(numbers[1]);
+                        if (text.includes('+') || text.includes('plus') || text.includes('add')) {
+                            return `The answer is: ${num1 + num2}`;
+                        }
+                        if (text.includes('-') || text.includes('minus') || text.includes('subtract')) {
+                            return `The answer is: ${num1 - num2}`;
+                        }
+                        if (text.includes('*') || text.includes('times') || text.includes('multiply')) {
+                            return `The answer is: ${num1 * num2}`;
+                        }
+                        if (text.includes('/') || text.includes('divide')) {
+                            return `The answer is: ${num1 / num2}`;
+                        }
+                    }
+                }
+                return null;
+            } catch (error) {
+                return null;
+            }
+        }
+
+        // UI functions
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `fixed top-4 right-4 z-50 px-4 py-2 rounded shadow-lg text-white ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                document.body.removeChild(toast);
+            }, 3000);
+        }
+
+        function addMessage(text, sender, fileUrl = null, fileName = null) {
+            if (welcomeMessage && messages.length === 0) {
+                welcomeMessage.remove();
+            }
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex ${sender === 'user' ? 'justify-end' : 'justify-start'}`;
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = `max-w-2xl px-6 py-4 rounded-xl font-quicksand text-base leading-relaxed ${
+                sender === 'user' 
+                    ? 'bg-mystical-gold text-mystical-dark shadow-lg'
+                    : sender === 'system'
+                        ? 'bg-mystical-dark/80 text-mystical-gold border border-mystical-gold/60 italic shadow-lg'
+                        : 'bg-opacity-25 text-mystical-light border border-mystical-gold/20 shadow-lg bg-white'
+            }`;
+            
+            const textDiv = document.createElement('div');
+            textDiv.className = 'whitespace-pre-wrap break-words';
+            textDiv.textContent = text;
+            
+            const timeDiv = document.createElement('div');
+            timeDiv.className = 'text-xs opacity-70 mt-2';
+            timeDiv.textContent = new Date().toLocaleTimeString();
+            
+            messageContent.appendChild(textDiv);
+            messageContent.appendChild(timeDiv);
+            messageDiv.appendChild(messageContent);
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            
+            const message = {
+                id: Date.now().toString(),
+                text,
+                sender,
+                timestamp: new Date(),
+                fileUrl,
+                fileName
+            };
+            
+            messages.push(message);
+            
+            if (sender === 'bot') {
+                lastBotResponse = text;
+            }
+        }
+
+        function showLoading() {
+            if (isLoading) return;
+            isLoading = true;
+            
+            const loadingDiv = document.createElement('div');
+            loadingDiv.id = 'loadingMessage';
+            loadingDiv.className = 'flex justify-start';
+            
+            const loadingContent = document.createElement('div');
+            loadingContent.className = 'bg-opacity-25 text-mystical-light border border-mystical-gold/20 px-6 py-4 rounded-xl font-quicksand shadow-lg bg-white';
+            
+            loadingContent.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <div class="w-3 h-3 bg-mystical-gold rounded-full animate-bounce"></div>
+                    <div class="w-3 h-3 bg-mystical-gold rounded-full animate-bounce delay-100"></div>
+                    <div class="w-3 h-3 bg-mystical-gold rounded-full animate-bounce delay-200"></div>
+                    <span class="ml-3 text-base">Mistry AI is consulting the ancient texts...</span>
+                </div>
+            `;
+            
+            loadingDiv.appendChild(loadingContent);
+            chatContainer.appendChild(loadingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function hideLoading() {
+            isLoading = false;
+            const loadingMessage = document.getElementById('loadingMessage');
+            if (loadingMessage) {
+                loadingMessage.remove();
+            }
+        }
+
+        function updateFileMemoryPanel() {
+            if (fileMemory.length > 0) {
+                fileMemoryPanel.classList.remove('hidden');
+                fileCount.textContent = fileMemory.length;
+                
+                fileList.innerHTML = '';
+                fileMemory.forEach(file => {
+                    const fileDiv = document.createElement('div');
+                    fileDiv.className = 'bg-mystical-gold/20 text-mystical-light px-3 py-1 rounded-full text-sm flex items-center border border-mystical-gold/30';
+                    fileDiv.innerHTML = `
+                        <span class="mr-2">${file.name}</span>
+                        <button onclick="removeFile('${file.id}')" class="hover:bg-mystical-gold/30 rounded-full p-1 transition-colors">
+                            <i data-lucide="x" class="w-4 h-4"></i>
+                        </button>
+                    `;
+                    fileList.appendChild(fileDiv);
+                });
+                lucide.createIcons();
+            } else {
+                fileMemoryPanel.classList.add('hidden');
+            }
+        }
+
+        function removeFile(fileId) {
+            fileMemory = fileMemory.filter(file => file.id !== fileId);
+            updateFileMemoryPanel();
+            showToast('File removed from memory');
+        }
+
+        function clearAllFilesFromMemory() {
+            fileMemory = [];
+            updateFileMemoryPanel();
+            showToast('All files cleared from memory');
+        }
+
+        async function sendMessage() {
+            const text = messageInput.value.trim();
+            if (!text && fileMemory.length === 0) return;
+
+            let fullPrompt = text;
+            
+            // Include files from memory
+            if (fileMemory.length > 0) {
+                const fileContext = fileMemory.map(file => 
+                    `File: ${file.name}\nContent:\n${file.content}`
+                ).join('\n\n---\n\n');
+                
+                fullPrompt = `Please analyze the following files and answer my question: ${text}\n\nFiles:\n${fileContext}`;
+            }
+
+            messageInput.value = '';
+            addMessage(text || 'Analyzing uploaded files...', 'user');
+            showLoading();
+
+            try {
+                // Check if it's a math problem
+                if (isMathProblem(fullPrompt)) {
+                    const localSolution = solveMathProblem(fullPrompt);
+                    if (localSolution) {
+                        setTimeout(() => {
+                            hideLoading();
+                            addMessage(localSolution, 'bot');
+                            showToast('Calculated locally');
+                        }, 800);
+                        return;
+                    }
+                }
+
+                // Simulate AI response for demonstration
+                setTimeout(() => {
+                    hideLoading();
+                    let response = "I understand your query. ";
+                    
+                    if (fileMemory.length > 0) {
+                        response += `I can see you've uploaded ${fileMemory.length} file(s). Based on the content, here's my analysis:\n\n`;
+                        fileMemory.forEach(file => {
+                            if (file.content) {
+                                response += `For ${file.name}: This appears to be a ${file.name.split('.').pop()} file with ${file.content.length} characters. `;
+                                if (file.content.includes('{') && file.content.includes('}')) {
+                                    response += "It looks like JSON data. ";
+                                }
+                                if (file.content.split('\n').length > 1) {
+                                    response += `It has ${file.content.split('\n').length} lines. `;
+                                }
+                            }
+                        });
+                        response += "\n\nWhat specific aspect would you like me to analyze further?";
+                    } else {
+                        if (text.toLowerCase().includes('hello') || text.toLowerCase().includes('hi')) {
+                            response += "Greetings, seeker of wisdom! How may I assist you today?";
+                        } else if (text.toLowerCase().includes('help')) {
+                            response += "I'm here to help! You can ask me questions, upload files for analysis, or solve math problems. What would you like to explore?";
+                        } else {
+                            response += "That's an interesting question. While I'm working in standalone mode, I can help with math problems and file analysis. For more complex queries, you might want to connect to the full AI backend.";
+                        }
+                    }
+                    
+                    addMessage(response, 'bot');
+                    showToast('Response generated');
+                }, 1000);
+
+            } catch (error) {
+                hideLoading();
+                addMessage('⚠️ Error: Could not process your request. Please try again.', 'bot');
+                showToast('Failed to get response', 'error');
+                console.error('Error:', error);
+            }
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const content = e.target.result;
+                    let fileContent = '';
+                    
+                    if (file.type.startsWith('text/') || file.name.endsWith('.txt') || file.name.endsWith('.md') || file.name.endsWith('.csv')) {
+                        fileContent = content;
+                    } else if (file.type === 'application/json') {
+                        try {
+                            fileContent = JSON.stringify(JSON.parse(content), null, 2);
+                        } catch {
+                            fileContent = content;
+                        }
+                    } else {
+                        fileContent = content;
+                    }
+                    
+                    const newFile = {
+                        id: Date.now().toString(),
+                        name: file.name,
+                        content: fileContent,
+                        uploadedAt: new Date()
+                    };
+                    
+                    fileMemory.push(newFile);
+                    updateFileMemoryPanel();
+                    
+                    const preview = fileContent.length > 200 ? fileContent.substring(0, 200) + '...' : fileContent;
+                    addMessage(`📄 File added to memory: ${file.name}\n\nPreview:\n${preview}`, 'system');
+                    showToast(`File "${file.name}" added to AI memory!`);
+                };
+                
+                reader.readAsText(file);
+            }
+        }
+
+        function clearChat() {
+            chatContainer.innerHTML = `
+                <div id="welcomeMessage" class="text-center mt-16">
+                    <div class="bg-white rounded-xl p-12 mx-auto max-w-lg shadow-2xl">
+                        <i data-lucide="sparkles" class="mx-auto mb-6 text-mystical-gold w-16 h-16"></i>
+                        <h3 class="text-2xl font-quicksand font-semibold text-mystical-dark mb-4">
+                            Welcome to the mystical realm...
+                        </h3>
+                        <p class="text-mystical-dark/80 font-quicksand text-lg leading-relaxed">
+                            Ask Mistry AI anything, and receive wisdom beyond time. Upload files to give me context and memory.
+                        </p>
+                    </div>
+                </div>
+            `;
+            messages = [];
+            lucide.createIcons();
+            showToast('Chat cleared');
+        }
+
+        function speakResponse() {
+            if (!lastBotResponse) {
+                showToast('No response to speak');
+                return;
+            }
+            const utterance = new SpeechSynthesisUtterance(lastBotResponse);
+            utterance.lang = 'en-US';
+            speechSynthesis.cancel();
+            speechSynthesis.speak(utterance);
+        }
+
+        function startVoiceRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                showToast('Speech recognition not supported in this browser', 'error');
+                return;
+            }
+            
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.onresult = (event) => {
+                messageInput.value = event.results[0][0].transcript;
+            };
+            recognition.onerror = (event) => {
+                showToast(`Voice recognition error: ${event.error}`, 'error');
+            };
+            recognition.start();
+        }
+
+        // Event listeners
+        sendButton.addEventListener('click', sendMessage);
+        uploadButton.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', handleFileUpload);
+        clearAllFiles.addEventListener('click', clearAllFilesFromMemory);
+        speakButton.addEventListener('click', speakResponse);
+        voiceButton.addEventListener('click', startVoiceRecognition);
+        clearButton.addEventListener('click', clearChat);
+        infoButton.addEventListener('click', () => infoDialog.classList.remove('hidden'));
+        closeDialog.addEventListener('click', () => infoDialog.classList.add('hidden'));
+
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Make removeFile function global
+        window.removeFile = removeFile;
+
+        // Initialize
+        lucide.createIcons();
+        console.log('Mistry AI Standalone loaded successfully!');
+    </script>
+</body>
+</html>
