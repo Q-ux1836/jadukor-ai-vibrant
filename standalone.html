@@ -57,6 +57,50 @@
         .animate-bounce { animation: bounce 1s infinite; }
         .delay-100 { animation-delay: 0.1s; }
         .delay-200 { animation-delay: 0.2s; }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            animation: scale-in 0.2s ease-out;
+        }
+        @keyframes scale-in {
+            0% { transform: scale(0.95); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        .close-btn:hover {
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -90,6 +134,24 @@
                 <path d="m9 12 2 2 4-4"/>
             </svg>
         </button>
+
+        <!-- Info Modal -->
+        <div id="infoModal" class="modal">
+            <div class="modal-content">
+                <button class="close-btn" id="closeModal">&times;</button>
+                <div class="mb-4 font-cinzel-deco text-3xl text-mystical-gold flex justify-center items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-sparkle">
+                        <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.582a.5.5 0 0 1 0 .962L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/>
+                    </svg>
+                    Builder Info
+                </div>
+                <div class="text-lg font-quicksand text-mystical-dark">
+                    <span class="font-semibold">Built by </span>
+                    Arka Das <br />
+                    <span class="italic text-mystical-gold">(Chief of Kenfex IT)</span>
+                </div>
+            </div>
+        </div>
 
         <div class="container mx-auto px-4 py-8 max-w-4xl relative z-10">
             <!-- Header -->
@@ -137,7 +199,7 @@
             </div>
 
             <!-- Chat Box -->
-            <div class="bg-white/10 backdrop-blur-sm border border-mystical-gold/30 rounded-lg mb-6 h-96 overflow-hidden">
+            <div class="bg-white/10 backdrop-blur-sm border border-mystical-gold/30 rounded-lg mb-6 h-[32rem] overflow-hidden">
                 <div class="h-full flex flex-col">
                     <div id="chatMessages" class="flex-1 overflow-y-auto p-6 space-y-6">
                         <!-- Welcome Message -->
@@ -243,6 +305,9 @@
         const fileList = document.getElementById('fileList');
         const fileCount = document.getElementById('fileCount');
         const clearAllFiles = document.getElementById('clearAllFiles');
+        const infoBtn = document.getElementById('infoBtn');
+        const infoModal = document.getElementById('infoModal');
+        const closeModal = document.getElementById('closeModal');
 
         // Math operations
         function isMathProblem(input) {
@@ -392,6 +457,15 @@
             setTimeout(() => toast.remove(), 3000);
         }
 
+        // Modal functions
+        function showModal() {
+            infoModal.classList.add('show');
+        }
+
+        function hideModal() {
+            infoModal.classList.remove('show');
+        }
+
         // Event handlers
         async function sendMessage() {
             const input = messageInput.value.trim();
@@ -426,17 +500,34 @@
                     }
                 }
 
-                // Simulate AI response (since we're offline)
-                setTimeout(() => {
+                // Try to connect to server first
+                try {
+                    const response = await fetch('http://localhost:5000/api/chat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ prompt: fullPrompt })
+                    });
+
+                    if (!response.ok) throw new Error('Network response was not ok');
+
+                    const data = await response.json();
                     hideLoading();
-                    addMessage(`🔮 **Mystical Response:**\n\nI sense your query through the ethereal realm. While I cannot connect to the mystical servers at this moment, I can still assist with:\n\n• Mathematical calculations (which I solved locally)\n• File analysis from your uploaded documents\n• General wisdom and guidance\n\nYour uploaded files are safely stored in my memory for context. Please try your question again, and I shall consult the ancient scrolls for answers!`, 'bot');
+                    addMessage(data.reply, 'bot');
                     isLoading = false;
-                    showToast('Mystical response conjured');
-                }, 1000);
+                    showToast('Response received from server');
+                } catch (serverError) {
+                    // Fallback to local response
+                    setTimeout(() => {
+                        hideLoading();
+                        addMessage(`🔮 **Mystical Response (Offline Mode):**\n\nI sense your query through the ethereal realm: "${input}"\n\nWhile I cannot connect to the mystical servers at this moment, I can still assist with:\n\n• Mathematical calculations (which I solve locally)\n• File analysis from your uploaded documents\n• General wisdom and guidance\n\nYour uploaded files are safely stored in my memory for context. The server appears to be unreachable, but I'm still here to help with local processing!`, 'bot');
+                        isLoading = false;
+                        showToast('Server unavailable - running in offline mode');
+                    }, 1000);
+                }
             } catch (error) {
                 hideLoading();
-                addMessage('⚠️ Error: Could not connect to the mystical realm. Please try again.', 'bot');
-                showToast('Failed to get response');
+                addMessage('⚠️ Error: Could not process your request. Please try again.', 'bot');
+                showToast('Failed to process request');
                 isLoading = false;
             }
         }
@@ -460,7 +551,7 @@
                             fileContent = content;
                         }
                     } else {
-                        fileContent = content;
+                        fileContent = content.substring(0, 500) + (content.length > 500 ? '...' : '');
                     }
                     
                     const newFile = {
@@ -474,7 +565,7 @@
                     updateFileMemory();
                     
                     addMessage(
-                        `📄 File added to memory: ${file.name}${fileContent ? '\n\nPreview:\n' + fileContent.substring(0, 200) + (fileContent.length > 200 ? '...' : '') : '\n(Binary file - will attempt to process)'}`,
+                        `📄 File added to memory: ${file.name}${fileContent ? '\n\nPreview:\n' + fileContent.substring(0, 200) + (fileContent.length > 200 ? '...' : '') : '\n(Binary file - content stored in memory)'}`,
                         'system'
                     );
                 };
@@ -482,6 +573,7 @@
                 reader.readAsText(file);
                 showToast(`File "${file.name}" added to AI memory!`);
             }
+            event.target.value = ''; // Reset file input
         }
 
         function toggleScroll() {
@@ -557,12 +649,22 @@
         voiceBtn.addEventListener('click', startVoiceRecognition);
         scrollBtn.addEventListener('click', toggleScroll);
         clearAllFiles.addEventListener('click', clearAllMemory);
+        
+        // Modal event listeners
+        infoBtn.addEventListener('click', showModal);
+        closeModal.addEventListener('click', hideModal);
+        infoModal.addEventListener('click', (e) => {
+            if (e.target === infoModal) hideModal();
+        });
 
         // Make removeFile globally accessible
         window.removeFile = removeFile;
 
         // Initialize
         updateFileMemory();
+        
+        // Scroll to top on load
+        window.scrollTo(0, 0);
     </script>
 </body>
 </html>
